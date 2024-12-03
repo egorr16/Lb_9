@@ -1,0 +1,76 @@
+#include <iostream>
+#include <string>
+#include <windows.h>
+#include <vector>
+
+using namespace std;
+
+
+struct Book {
+    string title;
+    string author;
+    string isbn;
+    int yearPublished;
+};
+
+class Library {
+private:
+    vector<Book> books;
+
+public:
+    void addBook(const Book& book) {
+        books.push_back(book);
+    }
+
+    void removeBookByISBN(const string& isbn) {
+        for (auto it = books.begin(); it != books.end(); ++it) {
+            if (it->isbn == isbn) {
+                books.erase(it);
+                return;
+            }
+        }
+        cout << "Книга з таким ISBN не знайдена." << endl;
+    }
+
+    void findBooksByAuthor(const string& author) {
+        cout << "Книги автора " << author << ":" << endl;
+        for (const Book& book : books) {
+            if (book.author == author) {
+                cout << "  " << book.title << " (" << book.yearPublished << ")" << endl;
+            }
+        }
+    }
+
+    void findBooksByYearRange(int startYear, int endYear) {
+        cout << "Книги, видані в період з " << startYear << " по " << endYear << ":" <<endl;
+        for (const Book& book : books) {
+            if (book.yearPublished >= startYear && book.yearPublished <= endYear) {
+                cout << "  " << book.title << " (" << book.author << ")" << endl;
+            }
+        }
+    }
+
+    void printAllBooks() {
+        cout << "Список усіх книг:" << endl;
+        for (const Book& book : books) {
+            cout << "  " << book.title << " (" << book.author << ", " << book.isbn << ", " << book.yearPublished << ")" << endl;
+        }
+    }
+};
+
+int main() {
+
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    Library library;
+
+library.addBook({ "Програмування: Принципи та практика C++", "Брайан Керніган, Денніс Річі", "1234567890", 1978 });
+
+    library.addBook({ "C++ Primer", "Стенлі Б. Ліппман", "9876543210", 2013 });
+    library.printAllBooks();
+    library.findBooksByAuthor("Брайан Керніган");
+    library.findBooksByYearRange(1990, 2000);
+
+    return 0;
+}
